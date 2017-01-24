@@ -1,0 +1,16 @@
+apache_user: apache
+apache_group: apache
+apache_log_group: apachelg
+apache_docroot_user: http
+apache_docroot_group: ghttp
+
+apache_base_directories:
+  - '/etc/httpd'
+  - '/etc/httpd/certs'
+
+apache_docroot_directories:
+  - '/var/www'
+  - '/var/www/html'
+
+apache_log_directories:
+  - '/var/log/httpd'

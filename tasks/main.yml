@@ -1,0 +1,52 @@
+---
+
+- name: Create Apache group
+  group: name={{ apache_group }} state=present
+  tags:
+    - apache
+
+- name: Create Apapche log group
+  group: name={{ apache_log_group }} state=present
+  tags:
+    - apache
+
+- name: Create Apache docroot group
+  group: name={{ apache_docroot_group }} state=present
+  tags:
+    - apache
+
+- name: Create Apache user
+  user: name={{ apache_user }} groups={{ apache_group }},{{ apache_docroot_group }}  state=present
+  tags:
+    - apache
+
+- name: Create Apache docroot user
+  user: name={{ apache_docroot_user }} groups={{ apache_docroot_group }},{{ apache_log_group }} state=present
+  tags:
+    - apache
+
+- name: Create Apache base directories
+  file: path={{ item }} state=directory owner=root group=root mode=0750
+  with_items:
+  - "{{ apache_base_directories }}"
+  tags:
+  - apache
+
+- name: Create Apache docroot directories
+  file: path={{ item }} state=directory owner={{ apache_docroot_user }} group={{ apache_docroot_group }} mode=0750
+  with_items:
+  - "{{ apache_docroot_directories }}"
+  tags:
+  - apache
+
+- name: Create Apache log directories
+  file: path={{ item }} state=directory owner=root group={{ apache_log_group }} mode=2750
+  with_items:
+  - "{{ apache_log_directories }}"
+  tags:
+  - apache
+
+- name: Install Apache package
+  yum: name=httpd state=installed
+  tags:
+  - apache

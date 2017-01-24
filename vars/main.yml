@@ -3,6 +3,11 @@ apache_group: apache
 apache_log_group: apachelg
 apache_docroot_user: http
 apache_docroot_group: ghttp
+packages:
+  - 'httpd'
+  - 'mod_ssl'
+
+sample_page: '/var/www/cgi-bin'
 
 apache_base_directories:
   - '/etc/httpd'
@@ -14,3 +19,17 @@ apache_docroot_directories:
 
 apache_log_directories:
   - '/var/log/httpd'
+
+modules_dir:
+- '/etc/httpd/conf.modules.d'
+
+conf_d_dir:
+- '/etc/httpd/conf.d'
+
+conf_dir:
+- '/etc/httpd/conf'
+
+unnesesary_conf_files:
+- '/etc/httpd/conf.d/welcome.conf'
+- '/etc/httpd/conf.d/autoindex.conf'
+- '/etc/httpd/conf.d/userdir.conf'

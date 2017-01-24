@@ -46,7 +46,77 @@
   tags:
   - apache
 
-- name: Install Apache package
-  yum: name=httpd state=installed
+- name: Install Apache packages
+  yum: name={{ item }} state=installed
+  with_items:
+   - "{{ packages }}"
   tags:
   - apache
+
+- name: Remove samble page
+  file: path={{ sample_page }} state=absent 
+  tags:
+  - apache
+  - remove-sample-page
+
+- name: Remove autoindex module
+  lineinfile:
+    dest: /etc/httpd/conf.modules.d/00-base.conf
+    state: absent
+    regexp: '^(.*)mod_autoindex(.*)$'
+  tags:
+  - apache
+  - delete-autoindex-module
+
+- name: Remove include module
+  lineinfile:
+    dest: /etc/httpd/conf.modules.d/00-base.conf
+    state: absent
+    regexp: '^(.*)mod_include(.*)$'
+  tags:
+  - apache
+  - delete-include-module
+
+- name: Remove info module
+  lineinfile:
+    dest: /etc/httpd/conf.modules.d/00-base.conf
+    state: absent
+    regexp: '^(.*)mod_info(.*)$'
+  tags:
+  - apache
+  - delete-info-module
+
+- name: Remove userdir module
+  lineinfile:
+    dest: /etc/httpd/conf.modules.d/00-base.conf
+    state: absent
+    regexp: '^(.*)mod_userdir(.*)$'
+  tags:
+  - apache
+  - delete-userdir-module
+
+- name: Remove dav modules
+  file: path=/etc/httpd/conf.modules.d//00-dav.conf state=absent
+  tags:
+  - apache
+  - delete-dav-module
+
+- name: Remove cgi modules
+  file: path=/etc/httpd/conf.modules.d//01-cgi.conf state=absent
+  tags:
+  - apache
+  - delete-cgi-module
+
+- name: Remove unnesesary modules files
+  file: path={{ item }} state=absent
+  with_items:
+  - "{{ unnesesary_conf_files }}"
+  tags:
+  - apache
+  - delete-unnesesary-modules-conf-files
+
+- name: Set proper permissions for APACHE_HOME
+  file: path=/etc/httpd/conf.d/ mode=640 recurse=yes
+  tags: 
+  - apache
+  - set-permissions
